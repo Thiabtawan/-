@@ -2,11 +2,9 @@
 <html lang="en">
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy KAD Day.>< /title>
+    <title>Happy KAD Day</title>
     <style>
         body {
             background-color: pink;
@@ -30,14 +28,10 @@
             box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
             border-radius: 10px;
         }
-        .popup img {
+        .popup img, .popup video {
             width: 300px;
             height: auto;
-        }
-        .popup video {
-            width: 100%;
             border-radius: 10px;
-            margin-top: 10px;
         }
         .close {
             display: block;
@@ -68,15 +62,15 @@
         <img src="Mail.jpg" width="150" alt="Envelope">
     </div>
     
-    <div class="popup" id="popup" onclick="nextMedia()">
+    <div class="popup" id="popup">
         <img id="popupImage" src="" alt="Popup Image">
         <video id="popupVideo" controls style="display:none;">
-            <source src="kat10.mp4" type="video/mp4">
+            <source id="videoSource" src="" type="video/mp4">
         </video>
         <button class="close" onclick="nextMedia()">
             <img src="heart.webp" alt="Next">
         </button>
-        <audio id="bgMusic" src="Music1.mp3"></audio>
+        <audio id="bgMusic" src="WWJNAJA.mp3"></audio>
     </div>
 
     <div class="message-box" id="messageBox">
@@ -86,13 +80,12 @@
     </div>
     
     <div class="message-box" id="finalMessage" style="display: none;">
-        <h2>เค้ารักเธอมากๆน้าาาถึงวันนี้ไม่มีไรให้แต่เดี๋ยวปลายเดือนนี้แหละให้ พอตอนนี้มีไรให้เซอร์นิดนึงน่ะคั้บ😘😍🤍โตขึ้นอีกปีแล้วเย้</h2>
+        <h2>เค้ารักเธอมากๆน้าาาถึงวันนี้ไม่มีไรให้แต่เดี๋ยวปลายเดือนนี้แหละให้ 😘😍🤍 โตขึ้นอีกปีแล้วเย้</h2>
     </div>
 
     <script>
-        // เพิ่มไฟล์รูปและวิดีโอในอาร์เรย์
         let media = [
-            { type: 'image', src: "kat1.jpg" },
+        { type: 'image', src: "kat1.jpg" },
             { type: 'image', src: "kat2.jpg" },
             { type: 'image', src: "kat3.jpg" },
             { type: 'image', src: "kat4.jpg" },
@@ -105,27 +98,28 @@
             { type: 'video', src: "kat12.mp4" },
             { type: 'image', src: "kat13.jpg" },
             { type: 'video', src: "kat10.mp4" },
-            { type: 'image', src: "kat14.mp4,
-            { type: 'image', src: "kat15.mp4" },
-            { type: 'video', src: "kat16.jpg" },
+            { type: 'video', src: "kat14.mp4"},
+            { type: 'video', src: "kat15.mp4" },
+            { type: 'image', src: "kat16.jpg" },
             { type: 'video', src: "kat17.mp4" },
             { type: 'video', src: "kat18.mp4" },
-            { type: 'video', src: "kat19.jpg" },
+            { type: 'image', src: "kat19.jpg" }
         ];
         
         let currentIndex = 0;
         let popup = document.getElementById("popup");
         let popupImage = document.getElementById("popupImage");
         let popupVideo = document.getElementById("popupVideo");
+        let videoSource = document.getElementById("videoSource");
         let bgMusic = document.getElementById("bgMusic");
 
         function openLetter() {
             popup.style.display = "block";
             showMedia();
-            bgMusic.play();
+            bgMusic.muted = false;
+            bgMusic.play().catch(error => console.log("Autoplay error:", error));
         }
 
-        // ฟังก์ชันแสดงไฟล์รูปหรือวิดีโอ
         function showMedia() {
             let currentMedia = media[currentIndex];
             if (currentMedia.type === 'image') {
@@ -135,28 +129,24 @@
             } else if (currentMedia.type === 'video') {
                 popupImage.style.display = "none";
                 popupVideo.style.display = "block";
-                popupVideo.src = currentMedia.src;
+                videoSource.src = currentMedia.src;
+                popupVideo.load();
             }
         }
 
-        // ฟังก์ชันเมื่อคลิกที่ป็อปอัพหรือปุ่มจะไปที่สื่อถัดไป
         function nextMedia() {
             currentIndex = (currentIndex + 1) % media.length;
             showMedia();
-
-            // เมื่อดูครบทั้งหมดแล้ว ให้แสดงกล่องข้อความและปิดป็อปอัพ
             if (currentIndex === 0) {
-                popup.style.display = "none";  // ปิดป็อปอัพ
-                showMessageBox();  // แสดงกล่องข้อความ
+                popup.style.display = "none";
+                showMessageBox();
             }
         }
 
-        // แสดงกล่องข้อความให้พิมพ์ข้อความ
         function showMessageBox() {
             document.getElementById("messageBox").style.display = "block";
         }
 
-        // ฟังก์ชันส่งข้อความ
         function sendMessage() {
             let message = document.getElementById("userMessage").value;
             if (message.trim() !== "") {
